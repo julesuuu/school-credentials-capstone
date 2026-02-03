@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 const usersRouter = require('./routes/users')
 const loginRouter = require('./routes/login')
+const requestsRouter = require('./controllers/requests')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
@@ -28,6 +29,11 @@ app.use(middleware.tokenExtractor)
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/requests', requestsRouter)
+
+app.get('/api/users/me', middleware.userExtractor, (request, response) => {
+  response.json(request.user)
+})
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

@@ -26,7 +26,7 @@ const login = async (request, response) => {
     { expiresIn: 60*60 }
   )
 
-  response.satus(200).send({
+  response.status(200).send({
     token,
     username: user.username,
     name: user.name,

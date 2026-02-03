@@ -8,7 +8,7 @@ const requestSchema = new mongoose.Schema({
   },
   documentType: {
     type: String,
-    enum: ['Report Card', 'Transcript of Records', 'Good Moral', 'Diploma']
+    enum: ['Report Card', 'TOR', 'Good Moral', 'Diploma']
   },
   paymentMethod: {
     type: String,
@@ -49,6 +49,4 @@ requestSchema.set('toJSON', {
   }
 })
 
-const Request =  mongoose.model('DocumentRequest', requestSchema)
-
-module.exports = Request
+module.exports = mongoose.model('DocumentRequest', requestSchema)

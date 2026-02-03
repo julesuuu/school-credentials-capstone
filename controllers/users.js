@@ -30,4 +30,4 @@ const register = async (request, response) => {
   response.status(201).json(savedUser)
 }
 
-module.exports = { register }
+module.exports = { register } 

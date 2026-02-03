@@ -1,4 +1,7 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
+const config = require('./config')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
