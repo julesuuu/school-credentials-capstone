@@ -23,6 +23,7 @@ const requestSchema = new mongoose.Schema({
     type: String,
     enum: [
       'PENDING',
+      'PAID',
       'PROCESSING',
       'READY_FOR_PICKUP',
       'COMPLETED'

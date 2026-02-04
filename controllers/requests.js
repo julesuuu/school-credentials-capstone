@@ -70,4 +70,22 @@ requestsRouter.post('/', middleware.userExtractor, async (request, response) => 
   })
 })
 
+requestsRouter.post('/webhook', async (request, response) => {
+  const payload = request.body
+
+  if (payload.data.attributes.type === 'checkout_session.payment.paid') {
+    const sessionId = payload.data.attributes.data.id
+
+    const docRequest = await DocumentRequest.findOne({ paymentSessionId: sessionId })
+
+    if (docRequest) {
+      docRequest.status = 'PAID'
+      await docRequest.save()
+      console.log(`Request ${docRequest._id} marked as PAID automatically.`)
+    }
+  }
+
+  response.status(200).send('Webhook received')
+})
+
 module.exports = requestsRouter
