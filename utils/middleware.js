@@ -58,10 +58,19 @@ const userExtractor = async (request, response, next) => {
   next()
 }
 
+const adminValidator = (request, response, next) => {
+  const user = request.user
+  if (!user || user.role !== 'ADMIN') {
+    return response.status(403).json({ error: 'access denied: admin role required' })
+  }
+  next()
+}
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenExtractor,
-  userExtractor
+  userExtractor,
+  adminValidator
 }
