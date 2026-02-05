@@ -12,12 +12,8 @@ const requestSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['ONLINE', 'CASH_ON_PICKUP'],
-    required: true
-  },
-  isPaid: {
-    type: Boolean,
-    default: false
+    enum: ['ONLINE', 'CASH'],
+    default: 'CASH'
   },
   status: {
     type: String,
@@ -26,7 +22,8 @@ const requestSchema = new mongoose.Schema({
       'PAID',
       'PROCESSING',
       'READY_FOR_PICKUP',
-      'COMPLETED'
+      'COMPLETED',
+      'CANCELED'
     ],
     default: 'PENDING'
   },
