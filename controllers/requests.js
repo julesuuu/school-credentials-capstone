@@ -79,6 +79,7 @@ requestsRouter.post('/:id/pay', middleware.userExtractor, async (request, respon
     return response.status(400).json({ error: 'Request cannot be paid at this stage.' })
   }
 
+  /* paymongo service not available atm
   try {
     const options = {
       method: 'POST',
@@ -102,7 +103,7 @@ requestsRouter.post('/:id/pay', middleware.userExtractor, async (request, respon
           }
         }
       }
-    }
+    } 
 
     const paymongoRes = await axios.request(options)
     
@@ -116,7 +117,39 @@ requestsRouter.post('/:id/pay', middleware.userExtractor, async (request, respon
   } catch (error) {
     console.error('Paymongo Error:', error.response?.data || error.message)
     response.status(500).json({ error: 'Failed to generate payment link' })
+  } */
+  
+  const mockSessionId = `cs_test_${Math.random().toString(36).substr(2, 9)}`
+  const mockCheckoutUrl = "https://test.paymongo.com/simulate-success"
+
+  docRequest.paymentSessionId = mockSessionId
+  docRequest.paymentMethod = 'ONLINE'
+  await docRequest.save()
+
+  console.log(`MOCK SESSION CREATED: ${mockSessionId}`)
+
+  response.json({
+    message: "MOCK: Payment link generated",
+    checkoutUrl: mockCheckoutUrl,
+    paymentSessionId: mockSessionId
+  })
+})
+
+requestsRouter.patch('/:id/status', middleware.userExtractor, async (request, response) => {
+  const { status } = request.body
+  const user = request.user
+
+  if (user.role !== 'ADMIN') {
+    return response.status(403).json({ error: 'Onlny admins can update request status' })
   }
+
+  const updatedRequest = await DocumentRequest.findByIdAndUpdate(
+    request.params.id, 
+    { status }, 
+    { new: true}
+  )
+
+  response.json(updatedRequest)
 })
 
 module.exports = requestsRouter
